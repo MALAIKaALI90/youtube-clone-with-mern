@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": " npx nodemon index.js"
+    "start": " npx nodemon  index.js"
   },
   "author": "malaika khan",
   "license": "ISC",
@@ -14,6 +14,8 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongoose": "^8.14.2"

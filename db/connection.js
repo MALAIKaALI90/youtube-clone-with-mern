@@ -6,12 +6,14 @@ import mongoose from "mongoose";
 // import express from "express"
 // const app= express()
 //ife fuction 
+ const MONGODB_URI="mongodb+srv://aimmabibi:yQEBQGcJfRrpvFIR@cluster0.q1yhe0e.mongodb.net"
+
  const connectDB=(async()=>{
       try {
-      await  mongoose.connect(`${process.env.MONGODB_URI}/${
-        process.env. DB_NAME
-        }`)
-        console.log(" mongodb connected");
+      await  mongoose.connect(`${MONGODB_URI}/backend`)
+      
+        
+        console.log(" mongodb connected" );
         
         // app.on("error",()=>{
         //     console.log("exprees is not listening",error);
