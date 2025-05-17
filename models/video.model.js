@@ -11,11 +11,11 @@ thumbnail:{
     required:true
 },
 title:{
-    type:string,
+    type:String,
     required:true
 },
 discription:{
-    type:string,
+    type:String,
     required:true
 },
 duration:{

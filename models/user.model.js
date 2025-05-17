@@ -6,7 +6,7 @@ const userSchema = new Schema({
     username: {
         type: String,
         require: true,
-        unique: trie,
+        unique: true,
         lowercase: true,
         trim: true,
         index: true
@@ -26,11 +26,11 @@ const userSchema = new Schema({
         index: true
     },
     avatar: {
-        type: string, //cloudnary url
+        type: String, //cloudnary url
         required: true
     },
     coveredImage: {
-        type: string //cloudnary url
+        type: String //cloudnary url
 
     },
     watchHIstory: [{
@@ -38,11 +38,11 @@ const userSchema = new Schema({
         ref: "Video"
     }],
     password: {
-        type: string,
+        type: String,
         required: [true, "password is requires"]
     },
     refreshToken: {
-        type: string
+        type: String
     }
 }, { timestamps: true })
 userSchema.pre("sava", async function (next) {
