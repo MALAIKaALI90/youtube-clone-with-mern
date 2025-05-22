@@ -7,9 +7,12 @@ import mongoose from "mongoose";
 // const app= express()
 //ife fuction 
 
+// let  MONGODB_URI="mongodb+srv://aimmabibi:yQEBQGcJfRrpvFIR@cluster0.q1yhe0e.mongodb.net"
  const connectDB=(async()=>{
       try {
-      await  mongoose.connect(`${process.env. MONGODB_URI}/${process.env. DB_NAME}`)
+      await  mongoose.connect(`${process.env. MONGODB_URI
+        
+      }/${process.env.DB_NAME}`)
         console.log(" mongodb connected" );
         // app.on("error",()=>{
         //     console.log("exprees is not listening",error);
@@ -18,9 +21,9 @@ import mongoose from "mongoose";
         // })
         // app.listen(process.env.PORT)
     } catch (error) {
-        console.log("mongodb connection error",error);
+        console.log("mongodb connection error in connection ",error);
         throw error
         
     }
-})()
-export default connectDB
+})
+export  default connectDB

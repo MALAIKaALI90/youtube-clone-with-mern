@@ -1,6 +1,5 @@
 import multer from "multer";
-//using disk storage
-
+//using disk storag } from "express";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

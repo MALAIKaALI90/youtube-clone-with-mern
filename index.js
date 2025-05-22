@@ -1,7 +1,53 @@
 
 
-import 'dotenv/config'
+import 'dotenv/config';
 import connectDB from "./db/connection.js";
+
+ connectDB()
+ 
+.then(()=>{
+    app.listen(process.env.PORT,()=>{
+        console.log(`server is running`);
+        
+    })
+})
+.catch((err)=>{
+    console.log("server is not ruunung",err);
+    
+})
+import {app} from "./app.js"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //multer ka use kr k client sy file ly gy  then local server pe temporary rakh dy gy
