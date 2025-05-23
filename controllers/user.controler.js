@@ -31,7 +31,7 @@ field?.trim()==="")) {
  }
   
  //3RD SSTEP IF USER  ALREDY RIGISTER OR NOT
- const existedUser=User.findOne({
+ const existedUser= await User.findOne({
      $or:[{
          username
         },{email}]
@@ -78,7 +78,7 @@ field?.trim()==="")) {
       //return res
 
 return res.status(201).json(
-   new  ApiResponse (200,createdUser,"user creates succesfully")
+   new  ApiResponse (200,"user creates succesfully",user)
 )
 
 

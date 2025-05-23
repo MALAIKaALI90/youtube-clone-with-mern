@@ -3,6 +3,9 @@
 import 'dotenv/config';
 import connectDB from "./db/connection.js";
 
+config({
+    path:"/.env"
+})
  connectDB()
  
 .then(()=>{
@@ -16,6 +19,7 @@ import connectDB from "./db/connection.js";
     
 })
 import {app} from "./app.js"
+import { config } from 'dotenv';
 
 
 
