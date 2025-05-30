@@ -24,7 +24,7 @@ duration:{
 },
 views:{
     type:Number,
-   default:false
+   default:0
 },
 isPublished:{
     type:Boolean,
