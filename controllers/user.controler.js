@@ -168,5 +168,56 @@ const logoutUser=asyncHandler( async (req,res) => {
    )
   
 })
+
+//change  user its own password
+const userNewPassword=asyncHandler(async (req,res) => {
+  const {oldPassword,newPassword}=req.body;
+  const user=  await User.findById (req.user?._id);
+
+    const verifyOldPassword=await user.isPasswordCorrect(oldPassword);
+
+  if (!verifyOldPassword) {
+    throw new Error(401,"your password is not coorect");
     
-    export{registerUser,loginUser,logoutUser}
+    
+  }
+   user.oldPassword=newPassword;
+   user.save({validateBeforeSave:false})
+   return res.status(200).json{new ApiResponse(200,{},"your password is changed now")}
+
+})
+const currentUser=asyncHandler(async (req,res) => {
+  return res.status(200)
+  .json(200,req.user,"Current user is here")
+})
+const updateUserDetail=asyncHandler(async (req,res) => {
+  const {username,email}=req.body
+  if (!username||!email) {
+    throw new Error( 401,"all filed are required");
+    
+  }
+ const user= User.findByIdAndUpdate(req.user?._id,
+  {
+    $set:{
+      username,
+      email
+    }},
+    {new:true}
+ ),select("-password")
+ return res.status(200).json(new ApiResponse(200,user,"account details are modified"))
+})
+// const UpdateUserFile=asyncHandler(async (req,res) => {
+//    const file=User.findByIdAndUpdate(req.file?.localFilePath,
+//     $set:{
+//       avatar
+//     }
+//     if(!file){
+//      throw new Error(402,"avatar is not presnet");
+    
+//    }
+//    )
+// })
+
+
+    
+    export{registerUser,loginUser,logoutUser,userNewPassword, currentUser,updateUserDetail}
