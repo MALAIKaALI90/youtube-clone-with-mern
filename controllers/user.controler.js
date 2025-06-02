@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 import { uplaodOnCloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/apiResponce.js";
 import { verifyJwt } from "../middlewares/isLoggedIn.js";
+import { Subscription } from "../models/subscription.model.js";
 
 const generateAccessAndRegreshToken = async (userId) => {
   try {
@@ -186,12 +187,12 @@ const userNewPassword = asyncHandler(async (req, res) => {
   }
   user.oldPassword = newPassword;
   user.save({ validateBeforeSave: false })
-  return res.status(200).json{ new ApiResponse(200, {}, "your password is changed now") }
+  return res.status(200).json(new ApiResponse(200, {}, "your password is changed now"))
 
 })
 const currentUser = asyncHandler(async (req, res) => {
   return res.status(200)
-    .json(200, req.user, "Current user is here")
+    .json(new ApiResponse(200, req.user, "Current user is here"))
 })
 const updateUserDetail = asyncHandler(async (req, res) => {
   const { username, email } = req.body
@@ -207,57 +208,133 @@ const updateUserDetail = asyncHandler(async (req, res) => {
       }
     },
     { new: true }
-  ), select("-password")
+  ).select("-password")
   return res.status(200).json(new ApiResponse(200, user, "account details are modified"))
 })
-const UpdateAvatarFile=asyncHandler(async (req,res) => {
-  
-  const avatarLocalPath=  avatarLocalPath
+const UpdateAvatarFile = asyncHandler(async (req, res) => {
+
+  const avatarLocalPath = req.file?.path;
   if (!avatarLocalPath) {
-    throw new ApiError( 402,"avatar file is not found")
-    
-  }
-  const avatar= await uplaodOnCloudinary(avatarLocalPath)
-  if (!avatar) {
-     throw new ApiError( 402,"avatar file is not uploading")
+    throw new ApiError(402, "avatar file is not found")
 
-    
   }
-  const user= await findByIdAndUpdate(req.user?._id,
-  { $set: {
-       avatar=avatar.url
-    }},
-    {new:true}
+  const avatar = await uplaodOnCloudinary(avatarLocalPath)
+  if (!avatar.url) {
+    throw new ApiError(402, "avatar file is not uploading")
+
+
+  }
+  const user = await User.findByIdAndUpdate(req.user?._id,
+    {
+      $set: {
+        avatar: avatar.url
+      }
+    },
+    { new: true }
   ).select("-password")
-     return res.status(200).json(
-new ApiResponse(200,user,"avatar image is edit")
-   )
+  return res.status(200).json(
+    new ApiResponse(200, user, "avatar image is edit")
+  )
 })
-const UpdateCoverFile=asyncHandler(async (req,res) => {
-  const coverImageLocalPath=req.file?.path;
+const UpdateCoverFile = asyncHandler(async (req, res) => {
+  const coverImageLocalPath = req.file?.path;
   if (!coverImageLocalPath) {
-    throw new Error( 401,"cover image is not found");
-    
-    
+    throw new Error(401, "cover image is not found");
+
+
   }
-    const covereImage= await uplaodOnCloudinary(coverImageLocalPath)
+  const covereImage = await uplaodOnCloudinary(coverImageLocalPath)
   if (!covereImage) {
-     throw new ApiError( 402,"cover file is not uploading")
+    throw new ApiError(402, "cover file is not uploading")
   }
-  const user=await User.findByIdAndUpdate(req.file?.path,{
-    
- $set: {
-       coverImageLocalPath=coverImageLocalPath.url
-    }},
-    {new:true}
+  const user = await User.findByIdAndUpdate(req.user?._id, {
+
+    $set: {
+      covereImage: covereImage.url
+    }
+  },
+    { new: true }
   ).select("-password")
-   return res.status(200).json(
-new ApiResponse(200,user,"cover image is edit")
-   )
+  return res.status(200).json(
+    new ApiResponse(200, user, "cover image is edit")
+  )
 
 })
+const getUserProfileSubscribtion = asyncHandler(async (req, res) => {
+  const { username } = req.prams;
+  if (!username) {
+    throw new Error(401, "username is missing");
+    const channel = await User.aggregate([
+      {
+        $match: {
+          username: username?.toLowerCase()
+        },
+      {
+        $lookup: {
+          from: "C",
+          localfield: "._id",
+          foreignField: "channel",
+          as: "subscribers"
 
 
-//aggregation pipelne
-// subscriber,subscribed,watch histoy is amde by Aggregattion pipeline
-export { registerUser, loginUser, logoutUser, userNewPassword, currentUser, updateUserDetail, UpdateAvatarFile, UpdateCoverFile }
+
+        },
+      {
+        $lookup: {
+          from: "Subscription",
+          localField: "._id",
+          foreignField: "subscriber",
+          as: "subscribedTo"
+        },
+        {
+        $addFields: {
+          subscribersCount: {
+            $size: "$subscribers"
+          },
+          subscribersToCount: {
+            $size: "$subscribedTo"
+          },
+
+        },
+
+      },
+      isSubscribed: {
+        $cond: {
+          if: { $in: [req.user?._id, "$subscribers.subscriber"] },
+          then: true,
+          else: false
+        }
+      }
+      }
+
+},
+  {
+    $project: {
+      fulname: 1,
+      username: 1,
+      email: 1,
+      subscribersCount: 1,
+      subscribersToCount: 1,
+      avatar: 1,
+      coverImage: 1,
+      isSubscribed: 1
+    }
+  }
+      }
+    ])
+    if (!channel.length) {
+      throw new Error(402,"channel does not exist");
+      
+      
+    }
+    return res.status(200).json(
+      new ApiResponse(200,channel[0],"user channel fetched successfully")
+    )
+
+    
+    
+  }
+
+  
+});
+export { registerUser, loginUser, logoutUser, userNewPassword, currentUser, updateUserDetail, UpdateAvatarFile, UpdateCoverFile, getUserProfileSubscribtion }
