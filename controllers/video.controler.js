@@ -4,7 +4,7 @@
 //get video id
 //update video
 //delete video
-//togle publish satatus
+
 import { Video } from "../models/video.model.js";
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponce.js";
