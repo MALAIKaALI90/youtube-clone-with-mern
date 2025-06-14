@@ -1,16 +1,17 @@
 import mongoose,{Schema} from "mongoose";
 const comentSchema=new Schema({
-    content:{
-        type:"string"
+ content:{
+        type:"string",
+        require:"true"
     },
-videoFile:[{
+videoFile:{
         type: Schema.Types.ObjectId,
         ref: "Video"
-    }],
-      likedBy:[{
+    },
+      comentedBy:{
         type: Schema.Types.ObjectId,
         ref: "User"
-    }],
+    },
 
 
 
