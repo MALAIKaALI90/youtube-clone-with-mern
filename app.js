@@ -20,10 +20,13 @@ import userRouter from "./routes/user.routes.js"
 import videoRouter from "./routes/video.routes.js"
 import likeRouter from "./routes/like.routes.js"
 import comentRouter from "./routes/comment.routes.js"
+import playlistRouter from "./routes/playlists.routes.js"
+
 //routess declaration
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/videos",videoRouter)
 app.use("/api/v1/like",likeRouter)
 app.use("/api/v1/coments",comentRouter)
+app.use("/api/v1/playlist",playlistRouter)
 
 export {app}

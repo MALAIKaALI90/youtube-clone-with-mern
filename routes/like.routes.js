@@ -6,5 +6,8 @@ import { toggleVideoLike,getAllLikedVideos } from "../controllers/like.controlle
 const router = Router()
 app.use(verifyJwt)
 router.route("/:videoId").post(verifyJwt,toggleVideoLike)
+
+router.route("/:comentId").get(verifyJwt,toggleVideoLike)
+
 router.route("/allVideos").get(verifyJwt,getAllLikedVideos)
 export default router

@@ -13,6 +13,25 @@ import { uplaodOnCloudinary } from "../utils/cloudinary.js";
 
 
 
+
+ const incrementViews = asyncHandler(async (req, res, next) => {
+  const { videoId } = req.params;
+
+  if (!videoId) {
+    return new ApiError(401,"there is not such video"); // skip if no videoId in params
+  }
+
+  const video = await Video.findById(videoId);
+  if (!video) {
+    throw new ApiError(404, "Video not found");
+  }
+console.log("video",video);
+
+  video.views += 1;
+  await video.save()
+  res.json(new ApiResponse(200,video,"Video fetched and view counted"))
+});
+
 const getAllVideos=asyncHandler(async (req,res) => {
   const allVideos=await Video.find();
   if (!allVideos) {
@@ -141,4 +160,4 @@ const videoDelete = async (req, res) => {
   }
 };  
 
-export {publishVideo,getVideoById,updateVideo,updateFile ,videoDelete, getAllVideos}
+export {publishVideo,getVideoById,updateVideo,updateFile ,videoDelete, getAllVideos,incrementViews}
