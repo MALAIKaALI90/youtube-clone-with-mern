@@ -48,7 +48,7 @@ youtube-clone-mern/
 
 Clone the repository
 
-git clone https://github.com/your-username/youtube-clone-mern.git
+git clone https://github.com/MALAIKaALI90/youtube-clone-with-mern.git
 cd youtube-clone-mern
 
 
