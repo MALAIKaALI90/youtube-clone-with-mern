@@ -26,3 +26,8 @@ pnpm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+# React / Next.js / Vite
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
